@@ -47,12 +47,16 @@ if __name__ == "__main__":
                 score += 25
 
             # 2. Time decay (molto importante)
-            if days_left <= 3:
-                score += 30
+            if days_left <= 1:
+                 score += 30
+            elif days_left <= 3:
+                  score += 25
             elif days_left <= 7:
-                score += 20
-            elif days_left <= 14:
-                score += 10
+                 score += 15
+            elif days_left <= 10:
+                 score += 5
+            else:
+                 continue
 
             # 3. Volume filter
             if volume > 100000:
