@@ -17,7 +17,14 @@ def get_markets():
 if __name__ == "__main__":
     markets = get_markets()
 
+   from datetime import datetime
+
+if __name__ == "__main__":
+    markets = get_markets()
+
     opportunities = []
+
+    now = datetime.utcnow()
 
     for m in markets:
         try:
@@ -25,14 +32,25 @@ if __name__ == "__main__":
             price = float(m.get("lastTradePrice", 0))
             volume = float(m.get("volume", 0))
 
-            if volume > 0 and (price >= 0.95 or price <= 0.05):
-                opportunities.append(f"{name} | price: {price} | vol: {volume}")
+            end_date = m.get("endDate") or m.get("end_date")
+
+            if not end_date:
+                continue
+
+            end = datetime.fromisoformat(end_date.replace("Z", ""))
+
+            days_left = (end - now).days
+
+            if volume > 0 and days_left <= 7 and (price >= 0.95 or price <= 0.05):
+                opportunities.append(
+                    f"{name}\nprice: {price} | vol: {volume} | days_left: {days_left}"
+                )
 
         except:
             continue
 
     if not opportunities:
-        send_message("🔎 Nessuna opportunità trovata al momento")
+        send_message("🔎 Nessuna opportunità ad alta probabilità (7 giorni)")
     else:
-        msg = "🚨 OPPORTUNITÀ POLYMARKET:\n\n" + "\n\n".join(opportunities[:5])
+        msg = "🚨 POLYMARKET EDGE (<7d):\n\n" + "\n\n".join(opportunities[:5])
         send_message(msg)
