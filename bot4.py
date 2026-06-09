@@ -31,10 +31,10 @@ if __name__ == "__main__":
             volume = float(m.get("volume", 0))
 
             end_date = m.get("endDate") or m.get("end_date")
-           if not end_date:
-               continue
+            if not end_date:
+                continue
 
-           try:
+            try:
                if isinstance(end_date, (int, float)) or str(end_date).isdigit():
                    end = datetime.utcfromtimestamp(int(end_date) / 1000)
                else:
@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
                days_left = (end - now).total_seconds() / 86400
 
-          except:
+            except:
               continue
 
             # ===== SCORE SYSTEM (conservativo) =====
